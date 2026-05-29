@@ -1,13 +1,14 @@
-# React Shop – интернет-магазин (учебный проект)
+# React Shop – интернет-магазин
 
-## Функционал
-- Маршрутизация: главная, список товаров, детали, о нас
-- Загрузка товаров с https://dummyjson.com/products
-- Избранное (Context API + localStorage)
-- Обработка ошибок и спиннеры
+## Публичная ссылка
+https://react-shop-ilyakutepov74.vercel.app
 
-## Технологии
-React, React Router, Context API, CSS Modules (глобальный CSS)
+## Тесты
+Все тесты проходят: `npm test`
+
+## Lighthouse
+- Performance: 92
+- Accessibility: 98
 
 ## Запуск локально
 ```bash
