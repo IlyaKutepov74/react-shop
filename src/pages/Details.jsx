@@ -8,8 +8,10 @@ function Details() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { addFavorite, removeFavorite, isFavorite } = useFavorites();
 
+  const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
+
+  // Загрузка данных о товаре
   useEffect(() => {
     fetch(`https://dummyjson.com/products/${id}`)
       .then(res => {
@@ -26,16 +28,20 @@ function Details() {
       });
   }, [id]);
 
+  // Обработчик кнопки "В избранное"
   const handleFavoriteToggle = () => {
+    if (!product) return;
     if (isFavorite(product.id)) {
-      removeFavorite(product.id);
+      removeFromFavorites(product.id);
     } else {
-      addFavorite(product);
+      // Добавляем товар в избранное (количество 1)
+      addToFavorites(product);
     }
   };
 
   if (loading) return <Spinner />;
-  if (error) return <div className="error">❌ {error}</div>;
+  if (error) return <div className="error">❌ Ошибка: {error}</div>;
+  if (!product) return null;
 
   return (
     <div>
@@ -48,7 +54,7 @@ function Details() {
           <p><strong>Бренд:</strong> {product.brand}</p>
           <p><strong>Категория:</strong> {product.category}</p>
           <p><strong>Описание:</strong> {product.description}</p>
-          <button 
+          <button
             onClick={handleFavoriteToggle}
             className={isFavorite(product.id) ? 'favorited' : ''}
           >

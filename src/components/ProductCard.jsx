@@ -1,6 +1,7 @@
+import { memo } from 'react';
 import { Link } from 'react-router-dom';
 
-function ProductCard({ product }) {
+const ProductCard = memo(({ product }) => {
   return (
     <div className="product-card">
       <img src={product.thumbnail} alt={product.title} />
@@ -10,6 +11,6 @@ function ProductCard({ product }) {
       <Link to={`/list/${product.id}`}>Подробнее →</Link>
     </div>
   );
-}
+});
 
 export default ProductCard;

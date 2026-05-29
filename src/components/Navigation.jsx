@@ -5,6 +5,7 @@ function Navigation() {
     <nav>
       <NavLink to="/" end>🏠 Главная</NavLink>
       <NavLink to="/list">📦 Товары</NavLink>
+      <NavLink to="/favourites">❤️ Избранное</NavLink>
       <NavLink to="/about">ℹ️ О нас</NavLink>
     </nav>
   );

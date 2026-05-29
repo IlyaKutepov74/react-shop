@@ -5,34 +5,54 @@ const FavoritesContext = createContext();
 export function FavoritesProvider({ children }) {
   const [favorites, setFavorites] = useState([]);
 
-  // Загружаем из localStorage при старте
   useEffect(() => {
     const stored = localStorage.getItem('favorites');
-    if (stored) setFavorites(JSON.parse(stored));
+    if (stored) {
+      try {
+        setFavorites(JSON.parse(stored));
+      } catch(e) { console.error(e); }
+    }
   }, []);
 
-  // Сохраняем при изменении
   useEffect(() => {
     localStorage.setItem('favorites', JSON.stringify(favorites));
   }, [favorites]);
 
-  const addFavorite = (product) => {
+  function addToFavorites(product) {
     setFavorites(prev => {
-      if (prev.some(p => p.id === product.id)) return prev;
-      return [...prev, product];
+      const exists = prev.find(item => item.id === product.id);
+      if (exists) {
+        return prev.map(item =>
+          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        );
+      }
+      return [...prev, { ...product, quantity: 1 }];
     });
-  };
+  }
 
-  const removeFavorite = (productId) => {
-    setFavorites(prev => prev.filter(p => p.id !== productId));
-  };
+  function removeFromFavorites(productId) {
+    setFavorites(prev => prev.filter(item => item.id !== productId));
+  }
 
-  const isFavorite = (productId) => {
-    return favorites.some(p => p.id === productId);
-  };
+  function updateQuantity(productId, delta) {
+    setFavorites(prev =>
+      prev.map(item => {
+        if (item.id === productId) {
+          const newQuantity = item.quantity + delta;
+          if (newQuantity <= 0) return null;
+          return { ...item, quantity: newQuantity };
+        }
+        return item;
+      }).filter(Boolean)
+    );
+  }
+
+  function isFavorite(productId) {
+    return favorites.some(item => item.id === productId);
+  }
 
   return (
-    <FavoritesContext.Provider value={{ favorites, addFavorite, removeFavorite, isFavorite }}>
+    <FavoritesContext.Provider value={{ favorites, addToFavorites, removeFromFavorites, updateQuantity, isFavorite }}>
       {children}
     </FavoritesContext.Provider>
   );
